@@ -19,7 +19,12 @@ struct RpgGameState {
 }
 
 impl GameState<KeyboardEvent, GamePoint<Dot>> for RpgGameState {
-    fn key_event(&mut self, _key_event: &KeyboardEvent) {}
+    fn key_event(&mut self, key_event: &KeyboardEvent) {
+        if key_event.enter() {
+            self.data1.at = GamePoint::new(0, 0);
+            self.data2.at = GamePoint::new(0, 0);
+        }
+    }
     fn update(&mut self) {
         self.data1.at = self.data1.at.clone() + GamePoint::new(1, 0);
         self.data2.at = self.data2.at.clone() + GamePoint::new(0, 1);
