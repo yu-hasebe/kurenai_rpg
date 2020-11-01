@@ -58,6 +58,7 @@ where
     }
 
     fn draw(&self, image_repository: &ImageRepository<GamePoint<Dot>>, canvas: &Canvas) {
+        canvas.clear_rect(GamePoint::new(0, 0), GamePoint::new(480, 480));
         let actor = self.actor_repository.find(&ActorId(0)).unwrap();
         actor.draw(image_repository, canvas, *actor.at()).unwrap();
     }
