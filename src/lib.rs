@@ -1,4 +1,5 @@
 mod domain;
+mod in_memory;
 mod kurenai_shared;
 use crate::kurenai_shared::{game_point::GamePoint, rpg_game_state::RpgGameState};
 use kurenai::{

@@ -1,4 +1,5 @@
 pub mod actor_id;
+pub mod actor_repository;
 pub mod direction;
 pub mod speed;
 
@@ -61,11 +62,15 @@ impl Actor {
         }
         self.set_direction(direction);
     }
+
+    pub fn actor_id(&self) -> &ActorId {
+        &self.actor_id
+    }
 }
 
 impl Actor {
-    fn actor_id(&self) -> &ActorId {
-        &self.actor_id
+    fn is_moving(&self) -> bool {
+        self.at().x() % 32 != 0 || self.at().y() % 32 != 0
     }
 
     fn at(&self) -> &GamePoint<Dot> {
@@ -86,10 +91,6 @@ impl Actor {
 
     fn speed(&self) -> &Speed {
         &self.speed
-    }
-
-    fn is_moving(&self) -> bool {
-        self.at().x() % 32 != 0 || self.at().y() % 32 != 0
     }
 }
 
