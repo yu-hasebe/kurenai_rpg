@@ -18,3 +18,11 @@ impl ActorRepository for InMemoryActorRepository {
         Ok(())
     }
 }
+
+impl InMemoryActorRepository {
+    pub fn new() -> Self {
+        Self {
+            store: Rc::new(RefCell::new(HashMap::new())),
+        }
+    }
+}

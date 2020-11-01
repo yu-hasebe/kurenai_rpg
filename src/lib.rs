@@ -3,7 +3,9 @@ mod domain;
 mod in_memory;
 
 use crate::{
-    application::rpg_game_state::RpgGameState, domain::models::shared::game_point::GamePoint,
+    application::rpg_game_state::RpgGameState,
+    domain::models::{actor::actor_repository::ActorRepository, shared::game_point::GamePoint},
+    in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
 };
 use kurenai::{
     canvas::Canvas,
@@ -26,7 +28,7 @@ pub fn main_js() -> Result<(), JsValue> {
 
     console::log_1(&JsValue::from_str("Hello world!"));
 
-    let rpg_game_state = RpgGameState::new();
+    let rpg_game_state = RpgGameState::<InMemoryActorRepository>::new();
     let canvas = Canvas::new("main-canvas", GamePoint::new(480, 480), "game-container").unwrap();
     let image_repository = {
         let bytes = include_bytes!("./sample.gif");

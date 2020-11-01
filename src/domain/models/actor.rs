@@ -63,20 +63,24 @@ impl Actor {
         self.set_direction(direction);
     }
 
+    pub fn is_staying(&self) -> bool {
+        self.at().x() % 32 == 0 && self.at().y() % 32 == 0
+    }
+
+    pub fn is_moving(&self) -> bool {
+        !self.is_staying()
+    }
+
     pub fn actor_id(&self) -> &ActorId {
         &self.actor_id
+    }
+
+    pub fn at(&self) -> &GamePoint<Dot> {
+        &self.at
     }
 }
 
 impl Actor {
-    fn is_moving(&self) -> bool {
-        self.at().x() % 32 != 0 || self.at().y() % 32 != 0
-    }
-
-    fn at(&self) -> &GamePoint<Dot> {
-        &self.at
-    }
-
     fn at_mut(&mut self) -> &mut GamePoint<Dot> {
         &mut self.at
     }
