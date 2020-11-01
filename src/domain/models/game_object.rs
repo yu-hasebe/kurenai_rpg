@@ -1,4 +1,4 @@
-use crate::kurenai_shared::game_point::GamePoint;
+use crate::domain::models::shared::game_point::GamePoint;
 use kurenai::{image::image_id::ImageId, point::Dot, sprite::Sprite};
 
 #[derive(Clone, Debug)]

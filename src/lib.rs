@@ -1,7 +1,10 @@
+mod application;
 mod domain;
 mod in_memory;
-mod kurenai_shared;
-use crate::kurenai_shared::{game_point::GamePoint, rpg_game_state::RpgGameState};
+
+use crate::{
+    application::rpg_game_state::RpgGameState, domain::models::shared::game_point::GamePoint,
+};
 use kurenai::{
     canvas::Canvas,
     game_loop::GameLoop,

@@ -3,9 +3,9 @@ pub mod actor_repository;
 pub mod direction;
 pub mod speed;
 
-use crate::{
-    domain::models::actor::{actor_id::ActorId, direction::Direction, speed::Speed},
-    kurenai_shared::game_point::GamePoint,
+use crate::domain::models::{
+    actor::{actor_id::ActorId, direction::Direction, speed::Speed},
+    shared::game_point::GamePoint,
 };
 use derive_new::new;
 use kurenai::{

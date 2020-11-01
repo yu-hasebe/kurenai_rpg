@@ -1,4 +1,4 @@
-use crate::{domain::models::game_object::GameObject, kurenai_shared::game_point::GamePoint};
+use crate::domain::models::{game_object::GameObject, shared::game_point::GamePoint};
 use kurenai::{
     canvas::Canvas,
     game_state::GameState,

@@ -1,6 +1,6 @@
 pub mod map_id;
 
-use crate::{domain::models::map::map_id::MapId, kurenai_shared::game_point::GamePoint};
+use crate::domain::models::{map::map_id::MapId, shared::game_point::GamePoint};
 use derive_new::new;
 use kurenai::point::{Dot, Point};
 
