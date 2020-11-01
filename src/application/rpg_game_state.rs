@@ -1,10 +1,13 @@
 use crate::{
-    domain::models::{
-        actor::{
-            actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
-            speed::Speed, Actor,
+    domain::{
+        models::{
+            actor::{
+                actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
+                speed::Speed, Actor,
+            },
+            shared::game_point::GamePoint,
         },
-        shared::game_point::GamePoint,
+        services::actor_service::ActorService,
     },
     in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
 };
@@ -12,9 +15,8 @@ use kurenai::{
     canvas::Canvas,
     game_state::GameState,
     image::{image_id::ImageId, image_repository::ImageRepository},
-    key_event::{KeyEvent, KeyboardEvent},
+    key_event::KeyboardEvent,
     point::{Dot, Point},
-    sprite::Sprite,
 };
 use std::rc::Rc;
 
@@ -22,7 +24,7 @@ pub struct RpgGameState<T>
 where
     T: ActorRepository,
 {
-    actor_repository: Rc<T>,
+    actor_service: ActorService<T>,
 }
 
 impl<T> GameState<KeyboardEvent, GamePoint<Dot>> for RpgGameState<T>
@@ -30,37 +32,15 @@ where
     T: ActorRepository,
 {
     fn key_event(&mut self, key_event: &KeyboardEvent) {
-        let mut actor = self.actor_repository.find(&ActorId(0)).unwrap();
-        if actor.is_staying() {
-            if key_event.arrow_left() {
-                actor.turn(Direction::Left);
-                actor.move_();
-            } else if key_event.arrow_down() {
-                actor.turn(Direction::Down);
-                actor.move_();
-            } else if key_event.arrow_right() {
-                actor.turn(Direction::Right);
-                actor.move_();
-            } else if key_event.arrow_up() {
-                actor.turn(Direction::Up);
-                actor.move_();
-            }
-        }
-        self.actor_repository.save(actor).unwrap();
+        self.actor_service.key_event(key_event);
     }
 
     fn update(&mut self) {
-        let mut actor = self.actor_repository.find(&ActorId(0)).unwrap();
-        if actor.is_moving() {
-            actor.move_();
-        }
-        self.actor_repository.save(actor).unwrap();
+        self.actor_service.update();
     }
 
     fn draw(&self, image_repository: &ImageRepository<GamePoint<Dot>>, canvas: &Canvas) {
-        canvas.clear_rect(GamePoint::new(0, 0), GamePoint::new(480, 480));
-        let actor = self.actor_repository.find(&ActorId(0)).unwrap();
-        actor.draw(image_repository, canvas, *actor.at()).unwrap();
+        self.actor_service.draw(image_repository, canvas);
     }
 }
 
@@ -76,8 +56,7 @@ impl RpgGameState<InMemoryActorRepository> {
             Speed(4),
         );
         actor_repository_rc.save(actor).unwrap();
-        Self {
-            actor_repository: actor_repository_rc,
-        }
+        let actor_service = ActorService::new(ActorId(0), actor_repository_rc);
+        Self { actor_service }
     }
 }
