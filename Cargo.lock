@@ -62,8 +62,8 @@ dependencies = [
 
 [[package]]
 name = "kurenai"
-version = "0.2.0"
-source = "git+https://github.com/yu-hasebe/kurenai?branch=develop#a335a1f1e6e216eb13d51add5e7a8936f8196171"
+version = "0.3.0"
+source = "git+https://github.com/yu-hasebe/kurenai?branch=master#6e143f98080de38b09cb79a49013c131d40fae09"
 dependencies = [
  "base64",
  "derive-new",
@@ -150,10 +150,10 @@ name = "rust-webpack-template"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
+ "derive-new",
  "futures",
  "js-sys",
  "kurenai",
- "num-traits",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-bindgen-test",

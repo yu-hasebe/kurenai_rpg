@@ -21,8 +21,8 @@ lto = true
 #default = ["wee_alloc"]
 
 [dependencies]
-kurenai = { git = "https://github.com/yu-hasebe/kurenai", branch = "develop" }
-num-traits = "0.2.12"
+derive-new = "0.5.8"
+kurenai = { git = "https://github.com/yu-hasebe/kurenai", branch = "master" }
 wasm-bindgen = "0.2.45"
 
 # `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
