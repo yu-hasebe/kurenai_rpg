@@ -4,7 +4,6 @@ use crate::{
             actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
             speed::Speed, Actor,
         },
-        game_object::GameObject,
         shared::game_point::GamePoint,
     },
     in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
@@ -75,7 +74,7 @@ impl RpgGameState<InMemoryActorRepository> {
             Direction::Down,
             Speed(4),
         );
-        actor_repository_rc.save(actor);
+        actor_repository_rc.save(actor).unwrap();
         Self {
             actor_repository: actor_repository_rc,
         }

@@ -3,8 +3,7 @@ mod domain;
 mod in_memory;
 
 use crate::{
-    application::rpg_game_state::RpgGameState,
-    domain::models::{actor::actor_repository::ActorRepository, shared::game_point::GamePoint},
+    application::rpg_game_state::RpgGameState, domain::models::shared::game_point::GamePoint,
     in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
 };
 use kurenai::{
