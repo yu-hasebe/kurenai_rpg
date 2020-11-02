@@ -1,15 +1,13 @@
-mod actor_application_service;
+mod actor;
 
-use crate::{
-    application::actor_application_service::ActorApplicationService,
-    domain::models::{
-        actor::{
-            actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
-            speed::Speed, Actor,
-        },
-        shared::point::Point,
+use crate::domain::models::{
+    actor::{
+        actor_id::ActorId, actor_repository::ActorRepository, direction::Direction, speed::Speed,
+        Actor,
     },
+    shared::point::Point,
 };
+use actor::actor_application_service::ActorApplicationService;
 use kurenai::{
     canvas::CanvasRepository,
     image::{ImageId, ImageRepository},
