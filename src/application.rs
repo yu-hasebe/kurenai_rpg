@@ -1,12 +1,15 @@
 mod actor;
 mod shared;
 
-use crate::domain::models::{
-    actor::{
-        actor_id::ActorId, actor_repository::ActorRepository, direction::Direction, speed::Speed,
-        Actor,
+use crate::domain::{
+    models::{
+        actor::{
+            actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
+            speed::Speed, Actor,
+        },
+        shared::point::Point,
     },
-    shared::point::Point,
+    services::actor_service::ActorService,
 };
 use actor::actor_application_service::ActorApplicationService;
 use kurenai::{
@@ -47,18 +50,22 @@ where
     T: ActorRepository,
 {
     pub fn new() -> Self {
-        let actor_repository_rc = Rc::new(T::new());
-        let actor = Actor::new(
-            ActorId(0),
-            ImageId(0),
-            Point::new(32, 32),
-            Point::new(0, 0),
-            Direction::Down,
-            Speed(4),
-        );
-        actor_repository_rc.save(actor).unwrap();
+        let actor_repository_rc = {
+            let actor_repository_rc = Rc::new(T::new());
+            let actor = Actor::new(
+                ActorId(0),
+                ImageId(0),
+                Point::new(32, 32),
+                Point::new(0, 0),
+                Direction::Down,
+                Speed(4),
+            );
+            actor_repository_rc.save(actor).unwrap();
+            actor_repository_rc
+        };
+        let actor_service = ActorService::new(actor_repository_rc.clone());
         let actor_application_service =
-            ActorApplicationService::new(ActorId(0), actor_repository_rc);
+            ActorApplicationService::new(ActorId(0), actor_service, actor_repository_rc);
         Self {
             actor_application_service,
         }
