@@ -1,5 +1,6 @@
-use crate::domain::models::actor::{
-    actor_id::ActorId, actor_repository::ActorRepository, direction::Direction, speed::Speed, Actor,
+use crate::{
+    application::shared,
+    domain::models::actor::{actor_id::ActorId, actor_repository::ActorRepository},
 };
 use derive_new::new;
 use kurenai::{
@@ -8,7 +9,6 @@ use kurenai::{
     key_event::KeyEvent,
 };
 use std::rc::Rc;
-use wasm_bindgen::prelude::*;
 
 #[derive(Clone, Debug, new)]
 pub struct ActorApplicationService<T>
@@ -25,32 +25,15 @@ where
 {
     pub fn key_event(&self, key_event: &KeyEvent) {
         let mut actor = self.actor_repository.find(self.current_actor_id()).unwrap();
-
-        web_sys::console::log_1(&JsValue::from_str(&format!("{:?}", actor)));
-
-        if actor.is_staying() {
-            if key_event.arrow_left() {
-                actor.turn(Direction::Left);
-                actor.move_();
-            } else if key_event.arrow_down() {
-                actor.turn(Direction::Down);
-                actor.move_();
-            } else if key_event.arrow_right() {
-                actor.turn(Direction::Right);
-                actor.move_();
-            } else if key_event.arrow_up() {
-                actor.turn(Direction::Up);
-                actor.move_();
-            }
+        if let Some(key_code) = shared::key_event_arrow_to_key_code(key_event) {
+            actor.move_from_staying(&key_code);
         }
         self.actor_repository.save(actor).unwrap();
     }
 
     pub fn update(&self) {
         let mut actor = self.actor_repository.find(self.current_actor_id()).unwrap();
-        if actor.is_moving() {
-            actor.move_();
-        }
+        actor.move_to_staying();
         self.actor_repository.save(actor).unwrap();
     }
 

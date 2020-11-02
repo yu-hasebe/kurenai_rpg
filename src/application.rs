@@ -1,4 +1,5 @@
 mod actor;
+mod shared;
 
 use crate::domain::models::{
     actor::{

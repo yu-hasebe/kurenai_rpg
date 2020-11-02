@@ -5,7 +5,10 @@ pub mod speed;
 
 use crate::domain::models::{
     actor::{actor_id::ActorId, direction::Direction, speed::Speed},
-    shared::point::{Dot, Point},
+    shared::{
+        key_code::KeyCode,
+        point::{Dot, Point},
+    },
 };
 use derive_new::new;
 use kurenai::image::ImageId;
@@ -29,32 +32,23 @@ impl PartialEq for Actor {
 impl Eq for Actor {}
 
 impl Actor {
-    pub fn move_(&mut self) {
-        let direction = *self.direction();
-        let speed = self.speed().0;
-        let at_mut = self.at_mut();
-        *at_mut = *at_mut
-            + match direction {
-                Direction::Left => Point::new(-speed, 0),
-                Direction::Up => Point::new(0, -speed),
-                Direction::Right => Point::new(speed, 0),
-                Direction::Down => Point::new(0, speed),
-            };
-    }
-
-    pub fn turn(&mut self, direction: Direction) {
-        if self.is_moving() {
-            panic!("Call this method when the actor is staying.");
+    pub fn move_from_staying(&mut self, key_code: &KeyCode) {
+        if self.is_staying() {
+            match key_code {
+                KeyCode::ArrowLeft => self.turn(Direction::Left),
+                KeyCode::ArrowUp => self.turn(Direction::Up),
+                KeyCode::ArrowRight => self.turn(Direction::Right),
+                KeyCode::ArrowDown => self.turn(Direction::Down),
+                _ => panic!("invalid key_code"),
+            }
+            self.move_();
         }
-        self.set_direction(direction);
     }
 
-    pub fn is_staying(&self) -> bool {
-        self.at().x() % 32 == 0 && self.at().y() % 32 == 0
-    }
-
-    pub fn is_moving(&self) -> bool {
-        !self.is_staying()
+    pub fn move_to_staying(&mut self) {
+        if self.is_moving() {
+            self.move_();
+        }
     }
 }
 
@@ -73,6 +67,36 @@ impl Actor {
 
     pub fn at(&self) -> &Point<Dot> {
         &self.at
+    }
+}
+
+impl Actor {
+    fn move_(&mut self) {
+        let direction = *self.direction();
+        let speed = self.speed().0;
+        let at_mut = self.at_mut();
+        *at_mut = *at_mut
+            + match direction {
+                Direction::Left => Point::new(-speed, 0),
+                Direction::Up => Point::new(0, -speed),
+                Direction::Right => Point::new(speed, 0),
+                Direction::Down => Point::new(0, speed),
+            };
+    }
+
+    fn turn(&mut self, direction: Direction) {
+        if self.is_moving() {
+            panic!("Call this method when the actor is staying.");
+        }
+        self.set_direction(direction);
+    }
+
+    fn is_staying(&self) -> bool {
+        self.at().x() % 32 == 0 && self.at().y() % 32 == 0
+    }
+
+    fn is_moving(&self) -> bool {
+        !self.is_staying()
     }
 }
 
