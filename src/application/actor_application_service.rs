@@ -11,7 +11,7 @@ use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
 #[derive(Clone, Debug, new)]
-pub struct ActorService<T>
+pub struct ActorApplicationService<T>
 where
     T: ActorRepository,
 {
@@ -19,7 +19,7 @@ where
     actor_repository: Rc<T>,
 }
 
-impl<T> ActorService<T>
+impl<T> ActorApplicationService<T>
 where
     T: ActorRepository,
 {
@@ -76,7 +76,7 @@ where
     }
 }
 
-impl<T> ActorService<T>
+impl<T> ActorApplicationService<T>
 where
     T: ActorRepository,
 {

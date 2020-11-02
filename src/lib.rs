@@ -2,7 +2,10 @@ mod application;
 mod domain;
 mod in_memory;
 
-use crate::application::rpg_game_service::RpgGameService;
+use crate::{
+    application::RpgGameService,
+    in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
+};
 use kurenai::{
     canvas::{Canvas, CanvasId, CanvasRepository},
     game_loop::GameLoop,
@@ -22,7 +25,8 @@ pub fn main_js() -> Result<(), JsValue> {
 
     web_sys::console::log_1(&JsValue::from_str("Hello world!"));
 
-    let rpg_game_service = RpgGameService::new();
+    // TODO: IoC container?
+    let rpg_game_service = RpgGameService::<InMemoryActorRepository>::new();
 
     let canvas_repository = {
         let new_html_canvas_element = Canvas::get_html_canvas_element_by_id("main-canvas").unwrap();

@@ -6,6 +6,12 @@ pub struct InMemoryActorRepository {
 }
 
 impl ActorRepository for InMemoryActorRepository {
+    fn new() -> Self {
+        Self {
+            store: Rc::new(RefCell::new(HashMap::new())),
+        }
+    }
+
     fn find(&self, actor_id: &ActorId) -> Result<Actor, String> {
         match self.store.borrow().get(actor_id) {
             Some(r) => Ok(r.clone()),
@@ -16,13 +22,5 @@ impl ActorRepository for InMemoryActorRepository {
     fn save(&self, actor: Actor) -> Result<(), String> {
         self.store.borrow_mut().insert(*actor.actor_id(), actor);
         Ok(())
-    }
-}
-
-impl InMemoryActorRepository {
-    pub fn new() -> Self {
-        Self {
-            store: Rc::new(RefCell::new(HashMap::new())),
-        }
     }
 }
