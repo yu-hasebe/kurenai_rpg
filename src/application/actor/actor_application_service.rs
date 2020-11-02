@@ -1,9 +1,7 @@
-use crate::{
-    application::shared,
-    domain::{
-        models::actor::{actor_id::ActorId, actor_repository::ActorRepository},
-        services::actor_service::ActorService,
-    },
+use crate::application::shared;
+use crate::domain::{
+    models::actor::{actor_id::ActorId, actor_repository::ActorRepository},
+    services::actor_service::ActorService,
 };
 use derive_new::new;
 use kurenai::{

@@ -1,6 +1,7 @@
 mod actor;
 mod shared;
 
+use crate::application::actor::actor_application_service::ActorApplicationService;
 use crate::domain::{
     models::{
         actor::{
@@ -11,7 +12,6 @@ use crate::domain::{
     },
     services::actor_service::ActorService,
 };
-use actor::actor_application_service::ActorApplicationService;
 use kurenai::{
     canvas::CanvasRepository,
     image::{ImageId, ImageRepository},

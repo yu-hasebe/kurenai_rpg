@@ -2,10 +2,8 @@ mod application;
 mod domain;
 mod in_memory;
 
-use crate::{
-    application::RpgGameService,
-    in_memory::actor::in_memory_actor_repository::InMemoryActorRepository,
-};
+use crate::application::RpgGameService;
+use crate::in_memory::actor::in_memory_actor_repository::InMemoryActorRepository;
 use kurenai::{
     canvas::{Canvas, CanvasId, CanvasRepository},
     game_loop::GameLoop,
