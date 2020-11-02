@@ -34,23 +34,15 @@ pub fn main_js() -> Result<(), JsValue> {
     };
 
     let image_repository = {
-        let bytes = include_bytes!("./sample.gif");
+        let bytes = include_bytes!("./image.gif");
         let new_html_image_element_rc =
             Rc::new(Image::create_new_html_image_element(bytes, "gif").unwrap());
         let image_repository = ImageRepository::new();
         image_repository.save(Image::new(
             ImageId(0),
             new_html_image_element_rc.clone(),
-            64,
-            96,
-            32,
-            32,
-        ));
-        image_repository.save(Image::new(
-            ImageId(1),
-            new_html_image_element_rc.clone(),
-            64,
-            64,
+            0,
+            0,
             32,
             32,
         ));
