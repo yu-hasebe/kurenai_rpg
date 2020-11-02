@@ -63,7 +63,7 @@ dependencies = [
 [[package]]
 name = "kurenai"
 version = "0.3.0"
-source = "git+https://github.com/yu-hasebe/kurenai?branch=develop#8d565ce993b42ece4afb1d4ac09725ac2273156c"
+source = "git+https://github.com/yu-hasebe/kurenai?branch=develop#bac9a32ab6312ab99ab9b344b4835ba27d9edbd9"
 dependencies = [
  "base64",
  "derive-new",

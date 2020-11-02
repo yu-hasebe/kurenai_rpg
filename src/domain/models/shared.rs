@@ -1,1 +1,1 @@
-pub mod game_point;
+pub mod point;

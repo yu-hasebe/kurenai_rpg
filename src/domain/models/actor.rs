@@ -5,21 +5,17 @@ pub mod speed;
 
 use crate::domain::models::{
     actor::{actor_id::ActorId, direction::Direction, speed::Speed},
-    shared::game_point::GamePoint,
+    shared::point::{Dot, Point},
 };
 use derive_new::new;
-use kurenai::{
-    image::image_id::ImageId,
-    point::{Dot, Point},
-    sprite::Sprite,
-};
+use kurenai::image::ImageId;
 
 #[derive(Clone, Debug, new)]
 pub struct Actor {
     actor_id: ActorId,
     image_id: ImageId,
-    size: GamePoint<Dot>,
-    at: GamePoint<Dot>,
+    size: Point<Dot>,
+    at: Point<Dot>,
     direction: Direction,
     speed: Speed,
 }
@@ -32,16 +28,6 @@ impl PartialEq for Actor {
 
 impl Eq for Actor {}
 
-impl Sprite<GamePoint<Dot>> for Actor {
-    fn image_id(&self) -> &ImageId {
-        &self.image_id
-    }
-
-    fn size(&self) -> &GamePoint<Dot> {
-        &self.size
-    }
-}
-
 impl Actor {
     pub fn move_(&mut self) {
         let direction = *self.direction();
@@ -49,10 +35,10 @@ impl Actor {
         let at_mut = self.at_mut();
         *at_mut = *at_mut
             + match direction {
-                Direction::Left => GamePoint::new(-speed, 0),
-                Direction::Up => GamePoint::new(0, -speed),
-                Direction::Right => GamePoint::new(speed, 0),
-                Direction::Down => GamePoint::new(0, speed),
+                Direction::Left => Point::new(-speed, 0),
+                Direction::Up => Point::new(0, -speed),
+                Direction::Right => Point::new(speed, 0),
+                Direction::Down => Point::new(0, speed),
             };
     }
 
@@ -70,18 +56,28 @@ impl Actor {
     pub fn is_moving(&self) -> bool {
         !self.is_staying()
     }
+}
 
+impl Actor {
     pub fn actor_id(&self) -> &ActorId {
         &self.actor_id
     }
 
-    pub fn at(&self) -> &GamePoint<Dot> {
+    pub fn image_id(&self) -> &ImageId {
+        &self.image_id
+    }
+
+    pub fn size(&self) -> &Point<Dot> {
+        &self.size
+    }
+
+    pub fn at(&self) -> &Point<Dot> {
         &self.at
     }
 }
 
 impl Actor {
-    fn at_mut(&mut self) -> &mut GamePoint<Dot> {
+    fn at_mut(&mut self) -> &mut Point<Dot> {
         &mut self.at
     }
 
@@ -107,24 +103,24 @@ mod tests {
         let actor1 = Actor::new(
             ActorId(0),
             ImageId(0),
-            GamePoint::new(32, 32),
-            GamePoint::new(0, 0),
+            Point::new(32, 32),
+            Point::new(0, 0),
             Direction::Left,
             Speed(4),
         );
         let actor2 = Actor::new(
             ActorId(0),
             ImageId(1),
-            GamePoint::new(32, 32),
-            GamePoint::new(4, 4),
+            Point::new(32, 32),
+            Point::new(4, 4),
             Direction::Up,
             Speed(2),
         );
         let actor3 = Actor::new(
             ActorId(1),
             ImageId(0),
-            GamePoint::new(32, 32),
-            GamePoint::new(0, 0),
+            Point::new(32, 32),
+            Point::new(0, 0),
             Direction::Left,
             Speed(4),
         );
@@ -138,14 +134,14 @@ mod tests {
         let mut actor = Actor::new(
             ActorId(0),
             ImageId(0),
-            GamePoint::new(32, 32),
-            GamePoint::new(0, 0),
+            Point::new(32, 32),
+            Point::new(0, 0),
             Direction::Right,
             Speed(speed),
         );
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&GamePoint::new(speed * i, 0), actor.at());
+            assert_eq!(&Point::new(speed * i, 0), actor.at());
             assert_eq!(&Direction::Right, actor.direction());
         }
 
@@ -153,7 +149,7 @@ mod tests {
         assert_eq!(&Direction::Down, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&GamePoint::new(32, speed * i), actor.at());
+            assert_eq!(&Point::new(32, speed * i), actor.at());
             assert_eq!(&Direction::Down, actor.direction());
         }
 
@@ -161,7 +157,7 @@ mod tests {
         assert_eq!(&Direction::Left, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&GamePoint::new(32 - speed * i, 32), actor.at());
+            assert_eq!(&Point::new(32 - speed * i, 32), actor.at());
             assert_eq!(&Direction::Left, actor.direction());
         }
 
@@ -169,7 +165,7 @@ mod tests {
         assert_eq!(&Direction::Up, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&GamePoint::new(0, 32 - speed * i), actor.at());
+            assert_eq!(&Point::new(0, 32 - speed * i), actor.at());
             assert_eq!(&Direction::Up, actor.direction());
         }
     }
@@ -180,8 +176,8 @@ mod tests {
         let mut actor = Actor::new(
             ActorId(0),
             ImageId(0),
-            GamePoint::new(32, 32),
-            GamePoint::new(1, 1),
+            Point::new(32, 32),
+            Point::new(1, 1),
             Direction::Left,
             Speed(4),
         );

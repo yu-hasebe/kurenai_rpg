@@ -1,18 +1,20 @@
-use kurenai::point::Point;
 use std::{
     marker::PhantomData,
     ops::{Add, Sub},
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct GamePoint<T> {
+pub struct Point<T> {
     unit: PhantomData<T>,
     x: i64,
     y: i64,
 }
 
-impl<T> Point<T> for GamePoint<T> {
-    fn new(x: i64, y: i64) -> Self {
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Dot {}
+
+impl<T> Point<T> {
+    pub fn new(x: i64, y: i64) -> Self {
         Self {
             unit: PhantomData::<T>,
             x,
@@ -20,16 +22,16 @@ impl<T> Point<T> for GamePoint<T> {
         }
     }
 
-    fn x(&self) -> &i64 {
+    pub fn x(&self) -> &i64 {
         &self.x
     }
 
-    fn y(&self) -> &i64 {
+    pub fn y(&self) -> &i64 {
         &self.y
     }
 }
 
-impl<T> Add for GamePoint<T> {
+impl<T> Add for Point<T> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -41,7 +43,7 @@ impl<T> Add for GamePoint<T> {
     }
 }
 
-impl<T> Sub for GamePoint<T> {
+impl<T> Sub for Point<T> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {

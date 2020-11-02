@@ -1,1 +1,1 @@
-pub mod rpg_game_state;
+pub mod rpg_game_service;
