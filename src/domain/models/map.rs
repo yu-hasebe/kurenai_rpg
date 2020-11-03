@@ -1,4 +1,5 @@
 pub mod map_id;
+pub mod map_repository;
 
 use crate::domain::models::{
     map::map_id::MapId,
@@ -14,14 +15,14 @@ pub struct Map {
 
 impl PartialEq for Map {
     fn eq(&self, other: &Self) -> bool {
-        self.map_id() == other.map_id()
+        self.id() == other.id()
     }
 }
 
 impl Eq for Map {}
 
 impl Map {
-    fn map_id(&self) -> &MapId {
+    pub fn id(&self) -> &MapId {
         &self.id
     }
 }
