@@ -1,8 +1,10 @@
 use crate::application::shared;
 use crate::domain::{
     models::{
-        actor::actor_repository::ActorRepository, map::map_repository::MapRepository,
+        actor::actor_repository::ActorRepository,
+        map::map_repository::MapRepository,
         scene::scene_repository::SceneRepository,
+        shared::canvas::{CANVAS_HEIGHT, CANVAS_WIDTH},
     },
     services::actor_service::ActorService,
 };
@@ -54,7 +56,9 @@ where
 
     pub fn draw(&self, image_repository: &ImageRepository, canvas_repository: &CanvasRepository) {
         let canvas = canvas_repository.find(&CanvasId(0)).unwrap();
-        canvas.context().clear_rect(0.0, 0.0, 480.0, 480.0);
+        canvas
+            .context()
+            .clear_rect(0.0, 0.0, CANVAS_WIDTH as f64, CANVAS_HEIGHT as f64);
         let actor = self
             .actor_repository_rc()
             .find(self.scene_repository_rc().find().unwrap().actor_id())
