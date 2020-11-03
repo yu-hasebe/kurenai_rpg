@@ -38,7 +38,7 @@ pub fn main_js() -> Result<(), JsValue> {
     };
 
     let image_repository = {
-        let bytes = include_bytes!("./image.gif");
+        let bytes = include_bytes!("./assets/images/image.gif");
         let new_html_image_element_rc =
             Rc::new(Image::create_new_html_image_element(bytes, "gif").unwrap());
         let image_repository = ImageRepository::new();
