@@ -68,7 +68,8 @@ where
             actor_repository_rc.save(actor).unwrap();
             actor_repository_rc
         };
-        let actor_service = ActorService::new(actor_repository_rc.clone());
+        let actor_service =
+            ActorService::new(scene_repository_rc.clone(), actor_repository_rc.clone());
         let actor_application_service =
             ActorApplicationService::new(actor_service, scene_repository_rc, actor_repository_rc);
         Self {

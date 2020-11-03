@@ -17,7 +17,7 @@ where
     SR: SceneRepository,
     AR: ActorRepository,
 {
-    actor_service: ActorService<AR>,
+    actor_service: ActorService<SR, AR>,
     scene_repository_rc: Rc<SR>,
     actor_repository_rc: Rc<AR>,
 }
