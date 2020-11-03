@@ -70,7 +70,7 @@ where
                 Point::new(TILE_WIDTH, TILE_HEIGHT),
                 Point::new(0, 0),
                 Direction::Down,
-                Speed(4),
+                Speed::Normal,
             );
             actor_repository_rc.save(actor).unwrap();
             actor_repository_rc

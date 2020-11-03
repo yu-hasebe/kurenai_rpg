@@ -74,14 +74,14 @@ impl Actor {
 impl Actor {
     fn move_(&mut self) {
         let direction = *self.direction();
-        let speed = self.speed().0;
+        let speed = *self.speed();
         let at_mut = self.at_mut();
         *at_mut = *at_mut
             + match direction {
-                Direction::Left => Point::new(-speed, 0),
-                Direction::Up => Point::new(0, -speed),
-                Direction::Right => Point::new(speed, 0),
-                Direction::Down => Point::new(0, speed),
+                Direction::Left => Point::new(-(speed as i64), 0),
+                Direction::Up => Point::new(0, -(speed as i64)),
+                Direction::Right => Point::new(speed as i64, 0),
+                Direction::Down => Point::new(0, speed as i64),
             };
     }
 
@@ -131,7 +131,7 @@ mod tests {
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Left,
-            Speed(4),
+            Speed::Normal,
         );
         let actor2 = Actor::new(
             ActorId(0),
@@ -139,7 +139,7 @@ mod tests {
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(4, 4),
             Direction::Up,
-            Speed(2),
+            Speed::Normal,
         );
         let actor3 = Actor::new(
             ActorId(1),
@@ -147,7 +147,7 @@ mod tests {
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Left,
-            Speed(4),
+            Speed::Normal,
         );
         assert_eq!(actor2, actor1);
         assert_ne!(actor3, actor1);
@@ -162,7 +162,7 @@ mod tests {
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Right,
-            Speed(speed),
+            Speed::Normal,
         );
         for i in 1..=8 {
             actor.move_();
@@ -204,7 +204,7 @@ mod tests {
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(1, 1),
             Direction::Left,
-            Speed(4),
+            Speed::Normal,
         );
         actor.turn(Direction::Up);
     }

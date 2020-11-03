@@ -1,2 +1,7 @@
+// TODO: error[E0658]: discriminants on non-unit variants are experimental
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct Speed(pub i64);
+pub enum Speed {
+    Slow = 2,
+    Normal = 4,
+    Fast = 8,
+}
