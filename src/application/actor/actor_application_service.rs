@@ -26,7 +26,6 @@ where
     actor_repository_rc: Rc<AR>,
 }
 
-// TODO: You call the actor three times per frame. Use cashe or something.
 impl<SR, AR, MR> ActorApplicationService<SR, AR, MR>
 where
     SR: SceneRepository,
