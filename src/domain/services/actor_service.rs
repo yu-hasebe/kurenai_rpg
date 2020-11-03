@@ -7,14 +7,14 @@ pub struct ActorService<T>
 where
     T: ActorRepository,
 {
-    actor_repository: Rc<T>,
+    actor_repository_rc: Rc<T>,
 }
 
 impl<T> ActorService<T>
 where
     T: ActorRepository,
 {
-    fn actor_repository(&self) -> Rc<T> {
-        self.actor_repository.clone()
+    fn actor_repository_rc(&self) -> Rc<T> {
+        self.actor_repository_rc.clone()
     }
 }

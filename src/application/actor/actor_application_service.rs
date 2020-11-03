@@ -18,7 +18,7 @@ where
 {
     current_actor_id: ActorId,
     actor_service: ActorService<T>,
-    actor_repository: Rc<T>,
+    actor_repository_rc: Rc<T>,
 }
 
 impl<T> ActorApplicationService<T>
@@ -27,29 +27,29 @@ where
 {
     pub fn key_event(&self, key_event: &KeyEvent) {
         let mut actor = self
-            .actor_repository()
+            .actor_repository_rc()
             .find(self.current_actor_id())
             .unwrap();
         if let Some(key_code) = shared::key_event_arrow_to_key_code(key_event) {
             actor.move_from_staying(&key_code);
         }
-        self.actor_repository.save(actor).unwrap();
+        self.actor_repository_rc().save(actor).unwrap();
     }
 
     pub fn update(&self) {
         let mut actor = self
-            .actor_repository()
+            .actor_repository_rc()
             .find(self.current_actor_id())
             .unwrap();
         actor.move_to_staying();
-        self.actor_repository.save(actor).unwrap();
+        self.actor_repository_rc.save(actor).unwrap();
     }
 
     pub fn draw(&self, image_repository: &ImageRepository, canvas_repository: &CanvasRepository) {
         let canvas = canvas_repository.find(&CanvasId(0)).unwrap();
         canvas.context().clear_rect(0.0, 0.0, 480.0, 480.0);
         let actor = self
-            .actor_repository()
+            .actor_repository_rc()
             .find(self.current_actor_id())
             .unwrap();
         let image = image_repository.find(actor.image_id()).unwrap();
@@ -78,7 +78,7 @@ where
         &self.current_actor_id
     }
 
-    fn actor_repository(&self) -> Rc<T> {
-        self.actor_repository.clone()
+    fn actor_repository_rc(&self) -> Rc<T> {
+        self.actor_repository_rc.clone()
     }
 }
