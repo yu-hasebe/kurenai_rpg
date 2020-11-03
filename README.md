@@ -1,3 +1,6 @@
+## Demo
+https://yu-hasebe.github.io/kurenai_rpg/
+
 ## How to install
 
 ```sh
