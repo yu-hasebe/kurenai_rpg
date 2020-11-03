@@ -15,7 +15,7 @@ use kurenai::image::ImageId;
 
 #[derive(Clone, Debug, new)]
 pub struct Actor {
-    actor_id: ActorId,
+    id: ActorId,
     image_id: ImageId,
     size: Point<Dot>,
     at: Point<Dot>,
@@ -25,7 +25,7 @@ pub struct Actor {
 
 impl PartialEq for Actor {
     fn eq(&self, other: &Self) -> bool {
-        self.actor_id() == other.actor_id()
+        self.id() == other.id()
     }
 }
 
@@ -53,8 +53,8 @@ impl Actor {
 }
 
 impl Actor {
-    pub fn actor_id(&self) -> &ActorId {
-        &self.actor_id
+    pub fn id(&self) -> &ActorId {
+        &self.id
     }
 
     pub fn image_id(&self) -> &ImageId {

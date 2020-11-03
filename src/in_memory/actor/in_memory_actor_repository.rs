@@ -20,7 +20,7 @@ impl ActorRepository for InMemoryActorRepository {
     }
 
     fn save(&self, actor: Actor) -> Result<(), String> {
-        self.store.borrow_mut().insert(*actor.actor_id(), actor);
+        self.store.borrow_mut().insert(*actor.id(), actor);
         Ok(())
     }
 }
