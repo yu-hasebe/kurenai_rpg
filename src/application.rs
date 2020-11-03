@@ -66,6 +66,7 @@ where
             let actor_repository_rc = Rc::new(AR::new());
             let actor = Actor::new(
                 ActorId(0),
+                MapId(0),
                 ImageId(0),
                 Point::new(TILE_WIDTH, TILE_HEIGHT),
                 Point::new(0, 0),

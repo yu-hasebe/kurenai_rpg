@@ -25,6 +25,10 @@ impl Map {
     pub fn id(&self) -> &MapId {
         &self.id
     }
+
+    pub fn size(&self) -> &Point<Dot> {
+        &self.size
+    }
 }
 
 #[cfg(test)]

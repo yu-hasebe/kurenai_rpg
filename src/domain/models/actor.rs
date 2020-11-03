@@ -5,6 +5,7 @@ pub mod speed;
 
 use crate::domain::models::{
     actor::{actor_id::ActorId, direction::Direction, speed::Speed},
+    map::map_id::MapId,
     shared::{
         canvas::{TILE_HEIGHT, TILE_WIDTH},
         key_code::KeyCode,
@@ -17,6 +18,7 @@ use kurenai::image::ImageId;
 #[derive(Clone, Debug, new)]
 pub struct Actor {
     id: ActorId,
+    map_id: MapId,
     image_id: ImageId,
     size: Point<Dot>,
     at: Point<Dot>,
@@ -56,6 +58,10 @@ impl Actor {
 impl Actor {
     pub fn id(&self) -> &ActorId {
         &self.id
+    }
+
+    pub fn map_id(&self) -> &MapId {
+        &self.map_id
     }
 
     pub fn image_id(&self) -> &ImageId {
@@ -127,6 +133,7 @@ mod tests {
     fn test_identity() {
         let actor1 = Actor::new(
             ActorId(0),
+            MapId(0),
             ImageId(0),
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
@@ -135,6 +142,7 @@ mod tests {
         );
         let actor2 = Actor::new(
             ActorId(0),
+            MapId(1),
             ImageId(1),
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(4, 4),
@@ -143,6 +151,7 @@ mod tests {
         );
         let actor3 = Actor::new(
             ActorId(1),
+            MapId(0),
             ImageId(0),
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
@@ -158,6 +167,7 @@ mod tests {
         let speed = 4;
         let mut actor = Actor::new(
             ActorId(0),
+            MapId(0),
             ImageId(0),
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
@@ -200,6 +210,7 @@ mod tests {
     fn test_turn_should_panic() {
         let mut actor = Actor::new(
             ActorId(0),
+            MapId(0),
             ImageId(0),
             Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(1, 1),
