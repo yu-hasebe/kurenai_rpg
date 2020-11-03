@@ -1,6 +1,6 @@
 use crate::application::shared;
 use crate::domain::{
-    models::actor::{actor_id::ActorId, actor_repository::ActorRepository},
+    models::{actor::actor_repository::ActorRepository, scene::scene_repository::SceneRepository},
     services::actor_service::ActorService,
 };
 use derive_new::new;
@@ -12,23 +12,26 @@ use kurenai::{
 use std::rc::Rc;
 
 #[derive(Clone, Debug, new)]
-pub struct ActorApplicationService<T>
+pub struct ActorApplicationService<SR, AR>
 where
-    T: ActorRepository,
+    SR: SceneRepository,
+    AR: ActorRepository,
 {
-    current_actor_id: ActorId,
-    actor_service: ActorService<T>,
-    actor_repository_rc: Rc<T>,
+    actor_service: ActorService<AR>,
+    scene_repository_rc: Rc<SR>,
+    actor_repository_rc: Rc<AR>,
 }
 
-impl<T> ActorApplicationService<T>
+// TODO: You call the actor three times per frame. Use cashe or something.
+impl<SR, AR> ActorApplicationService<SR, AR>
 where
-    T: ActorRepository,
+    SR: SceneRepository,
+    AR: ActorRepository,
 {
     pub fn key_event(&self, key_event: &KeyEvent) {
         let mut actor = self
             .actor_repository_rc()
-            .find(self.current_actor_id())
+            .find(self.scene_repository_rc().find().unwrap().actor_id())
             .unwrap();
         if let Some(key_code) = shared::key_event_arrow_to_key_code(key_event) {
             actor.move_from_staying(&key_code);
@@ -39,7 +42,7 @@ where
     pub fn update(&self) {
         let mut actor = self
             .actor_repository_rc()
-            .find(self.current_actor_id())
+            .find(self.scene_repository_rc().find().unwrap().actor_id())
             .unwrap();
         actor.move_to_staying();
         self.actor_repository_rc.save(actor).unwrap();
@@ -50,7 +53,7 @@ where
         canvas.context().clear_rect(0.0, 0.0, 480.0, 480.0);
         let actor = self
             .actor_repository_rc()
-            .find(self.current_actor_id())
+            .find(self.scene_repository_rc().find().unwrap().actor_id())
             .unwrap();
         let image = image_repository.find(actor.image_id()).unwrap();
         canvas
@@ -70,15 +73,16 @@ where
     }
 }
 
-impl<T> ActorApplicationService<T>
+impl<SR, AR> ActorApplicationService<SR, AR>
 where
-    T: ActorRepository,
+    SR: SceneRepository,
+    AR: ActorRepository,
 {
-    fn current_actor_id(&self) -> &ActorId {
-        &self.current_actor_id
+    fn scene_repository_rc(&self) -> Rc<SR> {
+        self.scene_repository_rc.clone()
     }
 
-    fn actor_repository_rc(&self) -> Rc<T> {
+    fn actor_repository_rc(&self) -> Rc<AR> {
         self.actor_repository_rc.clone()
     }
 }
