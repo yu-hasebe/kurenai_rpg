@@ -8,6 +8,7 @@ use crate::domain::{
             actor_id::ActorId, actor_repository::ActorRepository, direction::Direction,
             speed::Speed, Actor,
         },
+        map::{map_id::MapId, map_repository::MapRepository, Map},
         scene::{scene_repository::SceneRepository, Scene},
         shared::point::Point,
     },
@@ -21,18 +22,20 @@ use kurenai::{
 };
 use std::rc::Rc;
 
-pub struct RpgGameService<SR, AR>
+pub struct RpgGameService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
-    actor_application_service: ActorApplicationService<SR, AR>,
+    actor_application_service: ActorApplicationService<SR, AR, MR>,
 }
 
-impl<SR, AR> GameService for RpgGameService<SR, AR>
+impl<SR, AR, MR> GameService for RpgGameService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
     fn key_event(&self, key_event: &KeyEvent) {
         self.actor_application_service().key_event(key_event);
@@ -48,10 +51,11 @@ where
     }
 }
 
-impl<SR, AR> RpgGameService<SR, AR>
+impl<SR, AR, MR> RpgGameService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
     pub fn new() -> Self {
         let scene_repository_rc = Rc::new(SR::new(Scene::new(ActorId(0))));
@@ -68,8 +72,17 @@ where
             actor_repository_rc.save(actor).unwrap();
             actor_repository_rc
         };
-        let actor_service =
-            ActorService::new(scene_repository_rc.clone(), actor_repository_rc.clone());
+        let map_repository_rc = {
+            let map_repository_rc = Rc::new(MR::new());
+            let map = Map::new(MapId(0), Point::new(960, 960));
+            map_repository_rc.save(map).unwrap();
+            map_repository_rc
+        };
+        let actor_service = ActorService::new(
+            scene_repository_rc.clone(),
+            actor_repository_rc.clone(),
+            map_repository_rc,
+        );
         let actor_application_service =
             ActorApplicationService::new(actor_service, scene_repository_rc, actor_repository_rc);
         Self {
@@ -78,12 +91,13 @@ where
     }
 }
 
-impl<SR, AR> RpgGameService<SR, AR>
+impl<SR, AR, MR> RpgGameService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
-    fn actor_application_service(&self) -> &ActorApplicationService<SR, AR> {
+    fn actor_application_service(&self) -> &ActorApplicationService<SR, AR, MR> {
         &self.actor_application_service
     }
 }

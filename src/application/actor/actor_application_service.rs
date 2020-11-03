@@ -1,6 +1,9 @@
 use crate::application::shared;
 use crate::domain::{
-    models::{actor::actor_repository::ActorRepository, scene::scene_repository::SceneRepository},
+    models::{
+        actor::actor_repository::ActorRepository, map::map_repository::MapRepository,
+        scene::scene_repository::SceneRepository,
+    },
     services::actor_service::ActorService,
 };
 use derive_new::new;
@@ -12,21 +15,23 @@ use kurenai::{
 use std::rc::Rc;
 
 #[derive(Clone, Debug, new)]
-pub struct ActorApplicationService<SR, AR>
+pub struct ActorApplicationService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
-    actor_service: ActorService<SR, AR>,
+    actor_service: ActorService<SR, AR, MR>,
     scene_repository_rc: Rc<SR>,
     actor_repository_rc: Rc<AR>,
 }
 
 // TODO: You call the actor three times per frame. Use cashe or something.
-impl<SR, AR> ActorApplicationService<SR, AR>
+impl<SR, AR, MR> ActorApplicationService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
     pub fn key_event(&self, key_event: &KeyEvent) {
         let mut actor = self
@@ -73,10 +78,11 @@ where
     }
 }
 
-impl<SR, AR> ActorApplicationService<SR, AR>
+impl<SR, AR, MR> ActorApplicationService<SR, AR, MR>
 where
     SR: SceneRepository,
     AR: ActorRepository,
+    MR: MapRepository,
 {
     fn scene_repository_rc(&self) -> Rc<SR> {
         self.scene_repository_rc.clone()
