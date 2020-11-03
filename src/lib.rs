@@ -3,6 +3,7 @@ mod domain;
 mod in_memory;
 
 use crate::application::RpgGameService;
+use crate::domain::models::shared::canvas::{TILE_HEIGHT, TILE_WIDTH};
 use crate::in_memory::{
     actor::in_memory_actor_repository::InMemoryActorRepository,
     map::in_memory_map_repository::InMemoryMapRepository,
@@ -51,8 +52,8 @@ pub fn main_js() -> Result<(), JsValue> {
             new_html_image_element_rc.clone(),
             0,
             0,
-            32,
-            32,
+            TILE_WIDTH,
+            TILE_HEIGHT,
         ));
         image_repository
     };

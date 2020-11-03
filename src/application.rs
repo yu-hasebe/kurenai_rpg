@@ -10,7 +10,10 @@ use crate::domain::{
         },
         map::{map_id::MapId, map_repository::MapRepository, Map},
         scene::{scene_repository::SceneRepository, Scene},
-        shared::point::Point,
+        shared::{
+            canvas::{TILE_HEIGHT, TILE_WIDTH},
+            point::Point,
+        },
     },
     services::actor_service::ActorService,
 };
@@ -64,7 +67,7 @@ where
             let actor = Actor::new(
                 ActorId(0),
                 ImageId(0),
-                Point::new(32, 32),
+                Point::new(TILE_WIDTH, TILE_HEIGHT),
                 Point::new(0, 0),
                 Direction::Down,
                 Speed(4),

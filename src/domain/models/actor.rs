@@ -6,6 +6,7 @@ pub mod speed;
 use crate::domain::models::{
     actor::{actor_id::ActorId, direction::Direction, speed::Speed},
     shared::{
+        canvas::{TILE_HEIGHT, TILE_WIDTH},
         key_code::KeyCode,
         point::{Dot, Point},
     },
@@ -92,7 +93,7 @@ impl Actor {
     }
 
     fn is_staying(&self) -> bool {
-        self.at().x() % 32 == 0 && self.at().y() % 32 == 0
+        self.at().x() % TILE_WIDTH == 0 && self.at().y() % TILE_HEIGHT == 0
     }
 
     fn is_moving(&self) -> bool {
@@ -127,7 +128,7 @@ mod tests {
         let actor1 = Actor::new(
             ActorId(0),
             ImageId(0),
-            Point::new(32, 32),
+            Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Left,
             Speed(4),
@@ -135,7 +136,7 @@ mod tests {
         let actor2 = Actor::new(
             ActorId(0),
             ImageId(1),
-            Point::new(32, 32),
+            Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(4, 4),
             Direction::Up,
             Speed(2),
@@ -143,7 +144,7 @@ mod tests {
         let actor3 = Actor::new(
             ActorId(1),
             ImageId(0),
-            Point::new(32, 32),
+            Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Left,
             Speed(4),
@@ -158,7 +159,7 @@ mod tests {
         let mut actor = Actor::new(
             ActorId(0),
             ImageId(0),
-            Point::new(32, 32),
+            Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(0, 0),
             Direction::Right,
             Speed(speed),
@@ -173,7 +174,7 @@ mod tests {
         assert_eq!(&Direction::Down, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&Point::new(32, speed * i), actor.at());
+            assert_eq!(&Point::new(TILE_WIDTH, speed * i), actor.at());
             assert_eq!(&Direction::Down, actor.direction());
         }
 
@@ -181,7 +182,7 @@ mod tests {
         assert_eq!(&Direction::Left, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&Point::new(32 - speed * i, 32), actor.at());
+            assert_eq!(&Point::new(TILE_WIDTH - speed * i, TILE_HEIGHT), actor.at());
             assert_eq!(&Direction::Left, actor.direction());
         }
 
@@ -189,7 +190,7 @@ mod tests {
         assert_eq!(&Direction::Up, actor.direction());
         for i in 1..=8 {
             actor.move_();
-            assert_eq!(&Point::new(0, 32 - speed * i), actor.at());
+            assert_eq!(&Point::new(0, TILE_HEIGHT - speed * i), actor.at());
             assert_eq!(&Direction::Up, actor.direction());
         }
     }
@@ -200,7 +201,7 @@ mod tests {
         let mut actor = Actor::new(
             ActorId(0),
             ImageId(0),
-            Point::new(32, 32),
+            Point::new(TILE_WIDTH, TILE_HEIGHT),
             Point::new(1, 1),
             Direction::Left,
             Speed(4),
