@@ -64,6 +64,7 @@ where
             .find(self.scene_repository_rc().find().unwrap().actor_id())
             .unwrap();
         let image = image_repository.find(actor.image_id()).unwrap();
+        let actor_at_on_canvas = self.actor_service().actor_at_on_canvas();
         canvas
             .context()
             .draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
@@ -72,8 +73,8 @@ where
                 *image.begin_dot_y() as f64,
                 *image.width() as f64,
                 *image.height() as f64,
-                *actor.at().x() as f64,
-                *actor.at().y() as f64,
+                *actor_at_on_canvas.x() as f64,
+                *actor_at_on_canvas.y() as f64,
                 *actor.size().x() as f64,
                 *actor.size().y() as f64,
             )
@@ -87,6 +88,10 @@ where
     AR: ActorRepository,
     MR: MapRepository,
 {
+    fn actor_service(&self) -> &ActorService<SR, AR, MR> {
+        &self.actor_service
+    }
+
     fn scene_repository_rc(&self) -> Rc<SR> {
         self.scene_repository_rc.clone()
     }
